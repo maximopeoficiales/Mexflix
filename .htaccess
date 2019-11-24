@@ -1,0 +1,14 @@
+Options +FollowSymlinks 
+RewriteEngine On 
+
+RewriteBase /CursoPoo/Mexflix
+
+#condicionales#
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteCond %{SCRIPT_FILENAME} !-f
+
+#L indica que reemplaze el valor de la variable por get#
+
+RewriteRule ^(.*)$ index.php?r=$1 [L]
+
+#Rewrite ^(.*)$-(.*)$ index.php?r=$1&q=$2#
