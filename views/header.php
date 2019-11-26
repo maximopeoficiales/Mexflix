@@ -20,8 +20,7 @@ print('
             <h1 class="logo">Mexflix</h1>
         </div>
 ');
-if ($_SESSION{
-'ok'}) {
+if ($_SESSION{'ok'}) {
     print('
     <nav class="item  i-b  v-middle  ph12 lg10  lg-right  menu">
     <ul class="container ">

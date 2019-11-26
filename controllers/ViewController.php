@@ -7,5 +7,5 @@ class ViewController{
         require_once( self::$view_path . 'header.php');
         require_once( self::$view_path . $view . '.php');
         require_once( self::$view_path . 'footer.php');
-    }
+    }  
 }

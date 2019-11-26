@@ -12,8 +12,8 @@ class Autoload{
                 echo " <p>$controllers_path</p>";   */ 
             if (file_exists($models_path)) require_once($models_path);
             if (file_exists($controllers_path)) require_once($controllers_path);
-            /* lo que hace todo esto es que cuando se instancie en el index, estraera el nombre
-            de la calse lo guarda en esas rutas
+            /* lo que hace todo esto es que cuando se instancie en el index, extraera el nombre
+            de la clase lo guarda en esas rutas
             luego si existe la ruta
             la va requerir
             y asi se hace autoload dinamico */

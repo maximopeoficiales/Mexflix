@@ -13,7 +13,7 @@ class StatusController
 
     public function get($status_id = '')
     {
-        return $this->model->read($status_id);
+        return $this->model->get($status_id);
     }
 
     public function del($status_id = '')
