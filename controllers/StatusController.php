@@ -8,7 +8,7 @@ class StatusController
     }
     public function set($status_data = array())
     {
-        return $this->model->create($status_data);
+        return $this->model->set($status_data);
     }
 
     public function get($status_id = '')
@@ -18,7 +18,7 @@ class StatusController
 
     public function del($status_id = '')
     {
-        return $this->model->delete($status_id);
+        return $this->model->del($status_id);
     }
 
     public function __destruct()

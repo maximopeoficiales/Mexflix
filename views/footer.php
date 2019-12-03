@@ -2,7 +2,7 @@
 
 print('
 </main>
-<script src="./public/js/mexflix.js"></script>
+<script src="./public/js/mexflix1.js"></script>
 
 </body>
 </html>');
