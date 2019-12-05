@@ -1,12 +1,12 @@
-<h1>STATUS ADD</h1>
+
 <?php
 if ($_POST['r'] == 'status-add' && $_SESSION['role'] == 'Admin' && !isset($_POST["crud"])) {
     print('
     <h2 class="p1">Agregar Status</h2>
         <form  method="post" class="item">
-        <div class="p_25">
-            <input type="text" name="status" placeholder="status" required>
-        </div>
+            <div class="p_25">
+                <input type="text" name="status" placeholder="status" required>
+            </div>
 
         <div class="p_25">
             <input class="button add" type="submit" value="Agregar">
@@ -24,7 +24,7 @@ if ($_POST['r'] == 'status-add' && $_SESSION['role'] == 'Admin' && !isset($_POST
         'status' => $_POST['status']
     );
     /* ejecuto y guardo el query */
-    /* $status = $status_controller->set($new_status); */
+    $status = $status_controller->set($new_status);
     $template = '
     <div class="container">
         <p class="item add">Status <b>%s</b> salvado</p>
