@@ -10,8 +10,8 @@ class UsersModel extends Model
             /* aqui se estan guardando los datos, que toman las datos y lo vuelve variable */
             $$key = $value;
         }
-        $this->query = "REPLACE INTO users (user,email,name,birtday,pass,role) 
-        VALUES ('$user','$email','$name','$birthday',MD5('$pass'),$role) ";
+        $this->query = "REPLACE INTO users (user,email,name,birthday,pass,role) 
+        VALUES ('$user','$email','$name','$birthday',MD5('$pass'),'$role') ";
         $this->set_query();
     }
     public function get($user = '')
@@ -36,7 +36,7 @@ class UsersModel extends Model
 
     public function del($user = '')
     {
-        $this->query = "DELETE FROM users WHERE users='$user'";
+        $this->query = "DELETE FROM users WHERE user='$user'";
         /* No obtiene datos solo ejecuta el query */
         $this->set_query();
     }

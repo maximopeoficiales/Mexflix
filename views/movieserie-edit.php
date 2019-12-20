@@ -69,7 +69,7 @@ if ($_POST['r'] == 'status-edit' && $_SESSION['role'] == 'Admin' && !isset($_POS
 
     <script>
         window.onload = function () {
-            reloadPage("status");
+            reloadPage("title");
         }
     </script>
     ';
