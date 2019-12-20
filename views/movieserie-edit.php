@@ -1,84 +1,135 @@
-
 <?php
-$status_controller = new StatusController();
-if ($_POST['r'] == 'status-edit' && $_SESSION['role'] == 'Admin' && !isset($_POST["crud"])) {
-    /* llena $status con los datos del query */
-    $status = $status_controller->get($_POST['status_id']);
-    /* si esta vacio */
-    if (empty($status)) {
+$ms_controller = new MovieSeriesController();
+if ($_POST['r'] == 'movieserie-edit' && $_SESSION['role'] == 'Admin' && !isset($_POST['crud'])) {
+    $ms = $ms_controller->get($_POST['imdb_id']);
+    if (empty($ms)) {
         $template = '
-        <div class="container">
-            <p class="item error">No existe el status_id <b>%s</b></p>
-        </div>
-        <script>
-            window.onload = function () {
-                reloadPage("status");
-            }
-        </script>
-
-        ';
-        /* imprimo el template */
-        printf($template, $_POST['status_id']);
+			<div class="container">
+				<p class="item  error">No existe la MovieSerie <b>%s</b></p>
+			</div>
+			<script>
+				window.onload = function (){
+					reloadPage("movieseries")
+				}
+			</script>
+		';
+        printf($template, $_POST['imdb_id']);
     } else {
-        /* cuando un elemento esta disabled no se puede usar su dato
-        por lo cual creas un hidden con el mismo dato*/
-        $template_status = '
-        <h2 class="p1">Editar Status</h2>
-        <form method="post" class="item">
+        /* sia es movie se marca y viceversa */
+        $category_movie = ($ms[0]['category'] == 'Movie') ? 'checked' : '';
+        $category_serie = ($ms[0]['category'] == 'Serie') ? 'checked' : '';
 
-            <div class="p_25">
-                <input type="text" placeholder="status_id" value="%s" disabled required>
-
-                <input type="hidden" name="status_id" value="%s">
-            
-            </div>
-            <div class="p_25">
-                <input type="text" name="status" placeholder="status" value="%s" required>
-
-            </div>
-            <div class="p_25">
-                <input class="button edit" type="submit" value="Editar">
-                <input type="hidden" name="r"  value="status-edit">
-                <input type="hidden" name="crud"  value="set">
-            </div>
-            
-        </form>
-        
-        ';
-
+        $status_controller = new StatusController();
+        $status = $status_controller->get();
+        $status_select = '';
+        for ($n = 0; $n < count($status); $n++) {
+            /* SELECCIONA EL STATUS CORRECTO DEPENDIENDO EL ID */
+            $selected = ($ms[0]['status'] == $status[$n]['status']) ? 'selected' : '';
+            /* SELECCIONE LA OPCION CORRECTA DEL ESTADO  y su valor es el status_id*/
+            $status_select .= '<option value="' . $status[$n]['status_id'] . '"' . $selected . '>' . $status[$n]['status'] . '</option>';
+        }
+        $template_ms = '
+			<h2 class="p1">Editar MovieSerie</h2>
+			<form method="POST" class="item">
+				<div class="p_25">
+					<input type="text" placeholder="imdb_id" value="%s" disabled required>
+					<input type="hidden" name="imdb_id" value="%s">
+				</div>
+				<div class="p_25">
+					<input type="text" name="title" placeholder="título" value="%s" required>
+				</div>
+				<div class="p_25">
+					<textarea name="plot" cols="22" rows="10" placeholder="descripción">%s</textarea>
+				</div>
+				<div class="p_25">
+					<input type="text" name="author" placeholder="autor" value="%s">
+				</div>
+				<div class="p_25">
+					<input type="text" name="actors" placeholder="actores" value="%s">
+				</div>
+				<div class="p_25">
+					<input type="text" name="country" placeholder="país" value="%s">
+				</div>
+				<div class="p_25">
+					<input type="text" name="premiere" placeholder="estreno" value="%s" required>
+				</div>
+				<div class="p_25">
+					<input type="url" name="poster" placeholder="poster" value="%s">
+				</div>
+				<div class="p_25">
+					<input type="url" name="trailer" placeholder="trailer" value="%s">
+				</div>
+				<div class="p_25">
+					<input type="number" name="rating" placeholder="rating" value="%s" required>
+				</div>
+				<div class="p_25">
+					<input type="text" name="genres" placeholder="géneros" value="%s" required>
+				</div>
+				<div class="p_25">
+					<select name="status" placeholder="status" required>
+						<option value="">status</option>
+						%s
+					</select>
+				</div>
+				<div class="p_25">
+					<input type="radio" name="category" id="movie" value="Movie" %s required><label for="movie">Movie</label>
+					<input type="radio" name="category" id="serie" value="Serie" %s required><label for="serie">Serie</label>
+				</div>
+				<div class="p_25">
+					<input  class="button  edit" type="submit" value="Editar">
+					<input type="hidden" name="r" value="movieserie-edit">
+					<input type="hidden" name="crud" value="set">
+				</div>
+			</form>
+		';
         printf(
-            $template_status,
-            $status[0]["status_id"],
-            $status[0]["status_id"],
-            $status[0]["status"]
+            $template_ms,
+            $ms[0]['imdb_id'],
+            $ms[0]['imdb_id'],
+            $ms[0]['title'],
+            $ms[0]['plot'],
+            $ms[0]['author'],
+            $ms[0]['actors'],
+            $ms[0]['country'],
+            $ms[0]['premiere'],
+            $ms[0]['poster'],
+            $ms[0]['trailer'],
+            $ms[0]['rating'],
+            $ms[0]['genres'],
+            $status_select,
+            $category_movie,
+            $category_serie
         );
     }
-} else if ($_POST['r'] == 'status-edit' && $_SESSION['role'] == 'Admin' && $_POST["crud"] == "set") {
-    /* se crea array que se usara para enviar datos */
-    $save_status = array(
-        'status_id' => $_POST['status_id'],
-        'status' => $_POST['status']
+} else if ($_POST['r'] == 'movieserie-edit' && $_SESSION['role'] == 'Admin' && $_POST['crud'] == 'set') {
+    $save_ms = array(
+        'imdb_id' =>  $_POST['imdb_id'],
+        'title' =>  $_POST['title'],
+        'plot' =>  $_POST['plot'],
+        'author' =>  $_POST['author'],
+        'actors' =>  $_POST['actors'],
+        'country' =>  $_POST['country'],
+        'premiere' =>  $_POST['premiere'],
+        'poster' =>  $_POST['poster'],
+        'trailer' =>  $_POST['trailer'],
+        'rating' =>  $_POST['rating'],
+        'genres' =>  $_POST['genres'],
+        'status' =>  $_POST['status'],
+        'category' =>  $_POST['category']
     );
-    /* ejecuto y guardo el query */
-    $status = $status_controller->set($save_status);
-    
+    $ms = $ms_controller->set($save_ms);
     $template = '
-    <div class="container">
-        <p class="item edit">Status <b>%s</b> salvado</p>
-    </div>
-
-    <script>
-        window.onload = function () {
-            reloadPage("title");
-        }
-    </script>
-    ';
-
-    /* usaremos printf para reemplazar %s con el parametro */
-    printf($template, $_POST['status']);
+		<div class="container">
+			<p class="item  edit">MovieSerie <b>%s</b> salvada</p>
+		</div>
+		<script>
+			window.onload = function () {
+				reloadPage("movieseries")
+			}
+		</script>
+	';
+    printf($template, $_POST['title']);
 } else {
-    /* vista para acceso no autorizado */
     $controller = new ViewController();
-    $controller->load_view("error401");
+    $controller->load_view('error401');
 }
-?>
